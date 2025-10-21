@@ -7,8 +7,11 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="light-theme">
   <div class="container text-center">
+    <div class="theme-switcher">
+      <button id="theme-switcher-btn" class="btn btn-secondary">Toggle Theme</button>
+    </div>
     <h1 class="mt-5">Welcome to the CI/CD Pipeline Demo</h1>
     <p class="lead">This is a simple landing page served from a Node.js application.</p>
     <div id="api-status"></div>
@@ -16,6 +19,20 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    const themeSwitcherBtn = document.getElementById('theme-switcher-btn');
+    const body = document.body;
+
+    themeSwitcherBtn.addEventListener('click', () => {
+      body.classList.toggle('dark-theme');
+      const theme = body.classList.contains('dark-theme') ? 'dark' : 'light';
+      localStorage.setItem('theme', theme);
+    });
+
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'dark') {
+      body.classList.add('dark-theme');
+    }
+
     fetch('/api/status')
       .then(response => response.json())
       .then(data => {
