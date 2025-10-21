@@ -23,10 +23,10 @@ jobs:
     - name: Add test-repo remote and push
       env:
         TEST_REPO_URL: "https://github.com/Ali-ISAA/test-repo.git" # Assuming test-repo is also on GitHub
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.TEST_REPO_PAT }}
       run: |
         # Add test-repo as a remote
-        git remote add test-repo $TEST_REPO_URL
+        git remote add test-repo https://x-access-token:$GH_TOKEN@github.com/Ali-ISAA/test-repo.git
         
         # Push main branch to test-repo's main branch
         git push test-repo main
