@@ -22,7 +22,16 @@ jobs:
 
     - name: Add test-repo remote and push
       env:
-        GH_TOKEN: ${{ secrets.TEST_REPO_PAT }} # Ensure PAT is available as an environment variable
+        GH_TOKEN: ${{ secrets.TEST_REPO_PAT }}
       run: |
-        git remote add test-repo https://x-access-token:$GH_TOKEN@github.com/Ali-ISAA/test-repo.git
-        git push test-repo main
+        # Debug: Check if token is set (will show *** if present)
+        echo "Token is set: ${GH_TOKEN:+Yes}"
+        
+        # Remove any existing test-repo remote (in case it exists)
+        git remote remove test-repo 2>/dev/null || true
+        
+        # Add test-repo with authentication
+        git remote add test-repo https://x-access-token:${GH_TOKEN}@github.com/Ali-ISAA/test-repo.git
+        
+        # Push to test-repo
+        git push test-repo main --force
