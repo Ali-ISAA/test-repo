@@ -1,0 +1,32 @@
+name: Deploy to Test Repo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # Fetch all history for all branches and tags
+
+    - name: Configure Git
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "github-actions@github.com"
+
+    - name: Add test-repo remote and push
+      env:
+        TEST_REPO_URL: "https://github.com/Ali-ISAA/test-repo.git" # Assuming test-repo is also on GitHub
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Add test-repo as a remote
+        git remote add test-repo $TEST_REPO_URL
+        
+        # Push main branch to test-repo's main branch
+        git push test-repo main
