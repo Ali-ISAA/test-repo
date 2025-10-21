@@ -24,3 +24,4 @@ jobs:
         gh auth setup-git
         git remote add test-repo https://github.com/Ali-ISAA/test-repo.git
         git push test-repo main --force
+        #test
