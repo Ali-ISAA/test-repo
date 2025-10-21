@@ -20,10 +20,12 @@ jobs:
         git config user.name "GitHub Actions"
         git config user.email "github-actions@github.com"
 
-    - name: Add test-repo remote and push
-      env:
-        TEST_REPO_URL: "https://github.com/Ali-ISAA/test-repo.git" # Assuming test-repo is also on GitHub
-        GITHUB_TOKEN: ${{ secrets.TEST_REPO_PAT }}
+    - name: Configure Git for test-repo push
       run: |
-        git remote add test-repo https://x-access-token:${{ secrets.TEST_REPO_PAT }}@github.com/Ali-ISAA/test-repo.git
+        echo "https://x-access-token:${{ secrets.TEST_REPO_PAT }}@github.com" > ~/.git-credentials
+        git config --global credential.helper store
+
+    - name: Add test-repo remote and push
+      run: |
+        git remote add test-repo https://github.com/Ali-ISAA/test-repo.git
         git push test-repo main
