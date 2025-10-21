@@ -35,4 +35,4 @@ jobs:
         git push test-repo main --force
         
         # Clean up credentials
-        rm -f ~/.git-credentials
+        rm -f ~/.git-credentials #dsjfdsjf
