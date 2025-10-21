@@ -6,33 +6,16 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0
-        
-    - name: Configure Git
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "github-actions@github.com"
-        
+        fetch-depth: 0 # Fetch all history for all branches and tags
+
     - name: Push to test-repo
-      env:
-        GH_TOKEN: ${{ secrets.TEST_REPO_PAT }}
-      run: |
-        # Remove any existing test-repo remote
-        git remote remove test-repo 2>/dev/null || true
-        
-        # Use git credentials helper to set the token
-        git config --global credential.helper store
-        echo "https://x-access-token:${GH_TOKEN}@github.com" > ~/.git-credentials
-        
-        # Add test-repo remote (without token in URL)
-        git remote add test-repo https://github.com/Ali-ISAA/test-repo.git
-        
-        # Push to test-repo
-        git push test-repo main --force
-        
-        # Clean up credentials
-        rm -f ~/.git-credentials #dsjfdsjf
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.TEST_REPO_PAT }}
+        repository: Ali-ISAA/test-repo
+        branch: main
