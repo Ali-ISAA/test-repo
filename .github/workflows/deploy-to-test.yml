@@ -1,37 +1,39 @@
 name: Deploy to Test Repo
-
 on:
   push:
     branches:
       - main
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0 # Fetch all history for all branches and tags
-
+        fetch-depth: 0
+        
     - name: Configure Git
       run: |
         git config user.name "GitHub Actions"
         git config user.email "github-actions@github.com"
-
-    - name: Add test-repo remote and push
+        
+    - name: Debug and Add test-repo remote
       env:
         GH_TOKEN: ${{ secrets.TEST_REPO_PAT }}
       run: |
-        # Debug: Check if token is set (will show *** if present)
-        echo "Token is set: ${GH_TOKEN:+Yes}"
+        echo "Token length: ${#GH_TOKEN}"
+        echo "Token starts with: ${GH_TOKEN:0:4}"
         
-        # Remove any existing test-repo remote (in case it exists)
+        # Remove any existing test-repo remote
         git remote remove test-repo 2>/dev/null || true
         
         # Add test-repo with authentication
-        git remote add test-repo https://x-access-token:${GH_TOKEN}@github.com/Ali-ISAA/test-repo.git
+        git remote add test-repo "https://x-access-token:${GH_TOKEN}@github.com/Ali-ISAA/test-repo.git"
         
-        # Push to test-repo
+        # Show the remote URL (it will be masked)
+        echo "Remote URL set:"
+        git remote -v
+        
+    - name: Push to test-repo
+      run: |
         git push test-repo main --force
