@@ -17,23 +17,22 @@ jobs:
         git config user.name "GitHub Actions"
         git config user.email "github-actions@github.com"
         
-    - name: Debug and Add test-repo remote
+    - name: Push to test-repo
       env:
         GH_TOKEN: ${{ secrets.TEST_REPO_PAT }}
       run: |
-        echo "Token length: ${#GH_TOKEN}"
-        echo "Token starts with: ${GH_TOKEN:0:4}"
-        
         # Remove any existing test-repo remote
         git remote remove test-repo 2>/dev/null || true
         
-        # Add test-repo with authentication
-        git remote add test-repo "https://x-access-token:${GH_TOKEN}@github.com/Ali-ISAA/test-repo.git"
+        # Use git credentials helper to set the token
+        git config --global credential.helper store
+        echo "https://x-access-token:${GH_TOKEN}@github.com" > ~/.git-credentials
         
-        # Show the remote URL (it will be masked)
-        echo "Remote URL set:"
-        git remote -v
+        # Add test-repo remote (without token in URL)
+        git remote add test-repo https://github.com/Ali-ISAA/test-repo.git
         
-    - name: Push to test-repo
-      run: |
+        # Push to test-repo
         git push test-repo main --force
+        
+        # Clean up credentials
+        rm -f ~/.git-credentials
