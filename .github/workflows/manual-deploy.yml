@@ -36,9 +36,9 @@ jobs:
       env:
         PAT_TOKEN: ${{ secrets.PROD_REPO_PAT }}
       run: |
-        # Configure git
-        git config user.name "GitHub Actions"
-        git config user.email "github-actions@github.com"
+        # Configure git globally
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "github-actions@github.com"
 
         # Clone prod-repo
         git clone https://oauth2:${PAT_TOKEN}@github.com/Ali-ISAA/prod-repo.git prod-repo-temp
