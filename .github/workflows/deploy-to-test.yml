@@ -21,6 +21,13 @@ jobs:
         git config user.name "GitHub Actions"
         git config user.email "github-actions@github.com"
 
+        # Remove .github folder to prevent pushing workflows
+        rm -rf .github
+
+        # Commit the removal
+        git add -A
+        git commit -m "Remove .github folder before deployment to test" || echo "No changes to commit"
+
         # Push to test-repo using PAT in URL
         git remote add test-repo https://oauth2:${PAT_TOKEN}@github.com/Ali-ISAA/test-repo.git
         git push test-repo main --force
