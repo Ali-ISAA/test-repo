@@ -32,7 +32,7 @@ jobs:
         echo "Deploying to: prod-repo/main"
         echo "=========================================="
 
-    - name: Push to prod-repo using PAT
+    - name: Deploy to prod-repo using PAT
       env:
         PAT_TOKEN: ${{ secrets.PROD_REPO_PAT }}
       run: |
@@ -40,9 +40,22 @@ jobs:
         git config user.name "GitHub Actions"
         git config user.email "github-actions@github.com"
 
-        # Push to prod-repo using PAT in URL
-        git remote add prod-repo https://oauth2:${PAT_TOKEN}@github.com/Ali-ISAA/prod-repo.git
-        git push prod-repo main --force
+        # Clone prod-repo
+        git clone https://oauth2:${PAT_TOKEN}@github.com/Ali-ISAA/prod-repo.git prod-repo-temp
+
+        # Remove everything except .git and .github from prod-repo
+        cd prod-repo-temp
+        find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name '.github' -exec rm -rf {} +
+
+        # Copy all files from test-repo except .github
+        cd ..
+        rsync -av --exclude='.git' --exclude='.github' --exclude='prod-repo-temp' . prod-repo-temp/
+
+        # Commit and push changes
+        cd prod-repo-temp
+        git add -A
+        git diff --staged --quiet || git commit -m "Deploy from test-repo: ${{ inputs.deploy_message }} (by ${{ github.actor }})"
+        git push origin main
 
     - name: Deployment summary
       run: |
