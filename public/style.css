@@ -22,6 +22,15 @@ h1 {
   animation: fadeIn 1s ease-in-out;
 }
 
+.pipeline-status {
+  color: #6c757d;
+  margin-top: 1rem;
+}
+
+.dark-theme .pipeline-status {
+  color: #adb5bd;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
