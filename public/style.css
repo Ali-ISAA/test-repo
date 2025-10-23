@@ -47,12 +47,12 @@ h1 {
 }
 
 .pipeline-status {
-  color: #6c757d;
+  color: #6c757d !important;
   margin-top: 1rem;
 }
 
 .dark-theme .pipeline-status {
-  color: #adb5bd;
+  color: #adb5bd !important;
 }
 
 @keyframes fadeIn {
