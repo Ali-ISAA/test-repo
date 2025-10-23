@@ -43,9 +43,9 @@ jobs:
         # Clone prod-repo
         git clone https://oauth2:${PAT_TOKEN}@github.com/Ali-ISAA/prod-repo.git prod-repo-temp
 
-        # Remove everything except .git and .github from prod-repo
+        # Remove everything except .git, .github, and README.md from prod-repo
         cd prod-repo-temp
-        find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name '.github' -exec rm -rf {} +
+        find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name '.github' ! -name 'README.md' -exec rm -rf {} +
 
         # Copy all files from test-repo except .github and README.md
         cd ..
