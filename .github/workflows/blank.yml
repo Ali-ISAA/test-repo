@@ -106,7 +106,7 @@ jobs:
   # Second job: Run shell script (runs AFTER build-and-deploy completes)
   post-deployment-tasks:
     runs-on: self-hosted
-    #needs: build-and-deploy  # Wait for deployment to finish
+    needs: build-and-deploy  # Wait for deployment to finish
     
     steps:
       - name: Checkout code
