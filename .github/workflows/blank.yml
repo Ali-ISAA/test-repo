@@ -114,5 +114,5 @@ jobs:
       
       - name: Run post-deployment script
         run: |
-          chmod +x /home/idtadmin/actions-runner/deploy-tasks.sh
-          /home/idtadmin/actions-runner/deploy-tasks.sh
+          sed -i 's/\r$//' /home/idtadmin/actions-runner/deploy-tasks.sh
+          bash /home/idtadmin/actions-runner/deploy-tasks.sh
