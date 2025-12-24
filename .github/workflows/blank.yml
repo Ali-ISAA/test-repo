@@ -102,3 +102,17 @@ jobs:
           docker images test-repo --format "{{.ID}} {{.Tag}}" | grep -v latest | awk '{print $1}' | xargs -r docker rmi || true
           echo "Cleanup completed!"
         continue-on-error: true
+
+  # Second job: Run shell script (runs AFTER build-and-deploy completes)
+  post-deployment-tasks:
+    runs-on: self-hosted
+    #needs: build-and-deploy  # Wait for deployment to finish
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Run post-deployment script
+        run: |
+          chmod +x ./deploy-tasks.sh
+          ./deploy-tasks.sh
